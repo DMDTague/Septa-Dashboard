@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/septa/:path*",
+      "destination": "https://www3.septa.org/api/:path*"
+    }
+  ]
+}
