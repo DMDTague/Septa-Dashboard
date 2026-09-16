@@ -11,14 +11,14 @@ const InsightPanel = ({ activeSection, hoveredChartData, isCollapsed, onToggle }
         </button>
         <div className="writing-vertical-rl transform rotate-180 text-xs font-semibold tracking-widest uppercase text-slate-400 mt-6 flex items-center gap-2" style={{ writingMode: 'vertical-rl' }}>
           <Activity size={14} className="text-[#EF3E42]" />
-          <span>Analysis Context</span>
+          <span>Analysis Notes</span>
         </div>
       </div>
     );
   }
 
-  const content = hoveredChartData ? hoveredChartData.content : (SECTION_INSIGHTS[activeSection] || 'Select an element on the dashboard to view analytical insights.');
-  const title = hoveredChartData ? hoveredChartData.title : 'Section Overview';
+  const content = hoveredChartData ? hoveredChartData.content : (SECTION_INSIGHTS[activeSection] || 'Select an element on the dashboard to view additional context.');
+  const title = hoveredChartData ? hoveredChartData.title : 'Section Notes';
   const isHovered = Boolean(hoveredChartData);
 
   return (
@@ -29,7 +29,7 @@ const InsightPanel = ({ activeSection, hoveredChartData, isCollapsed, onToggle }
           <div className="p-1.5 rounded-md bg-[#EF3E42]/20 text-[#EF3E42]">
             <Activity size={18} />
           </div>
-          <span className="tracking-tight">Analytical Insights</span>
+          <span className="tracking-tight">Analysis Notes</span>
         </div>
         <button onClick={onToggle} className="p-1.5 hover:bg-slate-800 text-slate-400 hover:text-white rounded-lg transition-colors" aria-label="Collapse Panel">
           <ChevronRight size={18} />
@@ -42,11 +42,11 @@ const InsightPanel = ({ activeSection, hoveredChartData, isCollapsed, onToggle }
         <div className="flex items-center gap-2 text-xs">
           {isHovered ? (
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 font-medium">
-              <Sparkles size={12} className="text-blue-400" /> Hover Inspection
+              <Sparkles size={12} className="text-blue-400" /> Selected Data
             </span>
           ) : (
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-medium">
-              <HelpCircle size={12} className="text-slate-400" /> Executive Context
+              <HelpCircle size={12} className="text-slate-400" /> Section Context
             </span>
           )}
         </div>
@@ -64,7 +64,7 @@ const InsightPanel = ({ activeSection, hoveredChartData, isCollapsed, onToggle }
             Interactive Tip
           </p>
           <p className="text-[11px] text-slate-400 leading-normal">
-            Hover over chart bars, time-series points, or vehicle map markers to dynamically update this analysis pane.
+            Hover over chart bars, time-series points, or vehicle map markers to update this panel with context for the selected item.
           </p>
         </div>
       </div>
@@ -72,7 +72,7 @@ const InsightPanel = ({ activeSection, hoveredChartData, isCollapsed, onToggle }
       {/* Footer */}
       <div className="p-3.5 bg-slate-950/80 border-t border-slate-800 text-[11px] text-slate-400 flex justify-between items-center font-mono">
         <span className="font-semibold text-[#005DAA] uppercase">{activeSection}</span>
-        <span className="text-slate-500">{isHovered ? 'Active Target' : 'System View'}</span>
+        <span className="text-slate-500">{isHovered ? 'Selected Item' : 'Section View'}</span>
       </div>
     </div>
   );
