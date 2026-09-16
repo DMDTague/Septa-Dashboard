@@ -5,35 +5,35 @@ const MethodologyPanel = () => {
   const sources = [
     {
       name: "SEPTA TransitView API",
-      provides: "Real-time bus and trolley positions, delay offsets, vehicle IDs, next stop name",
+      provides: "Live bus and trolley vehicle information used by the vehicle map when the feed is available",
       format: "REST JSON API",
-      refresh: "15 seconds",
+      refresh: "Polled every 15 sec",
       icon: FileJson,
       url: "https://www3.septa.org/api/TransitViewAll/index.php"
     },
     {
       name: "SEPTA TrainView API",
-      provides: "Real-time Regional Rail train locations, late status in minutes, destination, track #",
+      provides: "Live Regional Rail train locations and reported lateness used by the map and OTP display",
       format: "REST JSON API",
-      refresh: "15 seconds",
+      refresh: "Polled every 15 sec",
       icon: FileJson,
       url: "https://www3.septa.org/api/TrainView/index.php"
     },
     {
-      name: "SEPTA ArcGIS Open Data Hub",
-      provides: "Geospatial layers, route polyline geometry, stop locations, census tract aggregations",
+      name: "SEPTA ArcGIS Open Data",
+      provides: "Public geospatial and system data referenced for the project's mapping and analytical context",
       format: "GeoJSON / FeatureServer",
-      refresh: "Quarterly / Annual",
+      refresh: "Dataset-dependent",
       icon: MapIcon,
       url: "https://data-septa.opendata.arcgis.com/"
     },
     {
-      name: "OpenDataPhilly Portal",
-      provides: "Average Daily Ridership by Mode, Route-level statistics, Financial projections",
-      format: "CSV / Open Data",
-      refresh: "Annual",
+      name: "OpenDataPhilly",
+      provides: "Public SEPTA datasets referenced for historical ridership and transportation context",
+      format: "Open data",
+      refresh: "Dataset-dependent",
       icon: Database,
-      url: "https://opendataphilly.org/datasets/septa-ridership-statistics/"
+      url: "https://opendataphilly.org/organization/septa/"
     }
   ];
 
@@ -46,8 +46,8 @@ const MethodologyPanel = () => {
             <Cpu size={22} className="text-blue-300" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold font-heading">Data Provenance & Methodology</h2>
-            <p className="text-blue-200 text-xs font-mono">Official Open Data Documentation & Mathematical Definitions</p>
+            <h2 className="text-2xl font-bold font-heading">Data & Methodology</h2>
+            <p className="text-blue-200 text-xs font-mono">Public sources, definitions, and what is actually live</p>
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@ const MethodologyPanel = () => {
         <div>
           <h3 className="text-base font-bold text-slate-100 font-heading mb-4 flex items-center gap-2 border-b border-slate-800 pb-2">
             <Database size={18} className="text-[#005DAA]" />
-            Live & Historical API Endpoints
+            Data Sources
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {sources.map((source, idx) => {
@@ -94,7 +94,7 @@ const MethodologyPanel = () => {
         <div>
           <h3 className="text-base font-bold text-slate-100 font-heading mb-4 flex items-center gap-2 border-b border-slate-800 pb-2">
             <CheckCircle2 size={18} className="text-emerald-400" />
-            Analytical Formulas & Thresholds
+            Definitions Used in the Dashboard
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
             <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-800 space-y-2">
@@ -102,23 +102,23 @@ const MethodologyPanel = () => {
               <p className="text-slate-300 text-[11px]">
                 <code>(Avg Daily Ridership / 2019 Baseline) × 100</code>
               </p>
-              <p className="text-[10px] text-slate-500 font-sans">Quantifies long-term post-pandemic ridership retention per transit mode.</p>
+              <p className="text-[10px] text-slate-500 font-sans">Used to compare the bundled post-pandemic mode figures with the project's 2019 baseline.</p>
             </div>
             
             <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-800 space-y-2">
-              <h4 className="font-bold text-emerald-400 uppercase text-[11px]">On-Time Standard</h4>
+              <h4 className="font-bold text-emerald-400 uppercase text-[11px]">On-Time Threshold</h4>
               <p className="text-slate-300 text-[11px]">
-                <code>Late Offset ≤ 5 Minutes</code>
+                <code>Reported lateness ≤ 5 minutes</code>
               </p>
-              <p className="text-[10px] text-slate-500 font-sans">Standard SEPTA metric. Trains/buses within 5 minutes of schedule count as on-time.</p>
+              <p className="text-[10px] text-slate-500 font-sans">The live Regional Rail display treats TrainView records reported five minutes late or less as on-time.</p>
             </div>
 
             <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-800 space-y-2">
-              <h4 className="font-bold text-amber-400 uppercase text-[11px]">Census Tract Buckets</h4>
+              <h4 className="font-bold text-amber-400 uppercase text-[11px]">Tract Buckets</h4>
               <p className="text-slate-300 text-[11px]">
-                Cold (&lt;50), Standard (50-1k), High (1k+)
+                Cold (&lt;50), Standard (50–1k), High (1k+)
               </p>
-              <p className="text-[10px] text-slate-500 font-sans">Buckets census tracts by boardings+alightings to isolate high-priority corridors.</p>
+              <p className="text-[10px] text-slate-500 font-sans">Project-defined buckets used for the exploratory tract view; they are not SEPTA service classifications.</p>
             </div>
           </div>
         </div>
@@ -127,13 +127,15 @@ const MethodologyPanel = () => {
         <div>
           <h3 className="text-base font-bold text-slate-100 font-heading mb-4 flex items-center gap-2 border-b border-slate-800 pb-2">
             <ShieldAlert size={18} className="text-[#EF3E42]" />
-            Dataset Limitations & Caveats
+            What to Keep in Mind
           </h3>
           <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-800 text-xs text-slate-400 space-y-2 font-sans">
             <ul className="list-disc pl-5 space-y-1.5 leading-relaxed">
-              <li><strong className="text-slate-200">Real-Time API Latency:</strong> TransitView and TrainView position feeds depend on cellular telemetry modem polling on vehicles; location updates may lag by 15-30 seconds.</li>
-              <li><strong className="text-slate-200">Underground Tunnel GPS Gaps:</strong> Heavy Rail lines (Market-Frankford Line & Broad Street Line) pass through underground tunnels in Center City where GPS signals are lost, defaulting positions to station arrival events.</li>
-              <li><strong className="text-slate-200">Annual Aggregations:</strong> Ridership numbers rely on Automatic Passenger Counters (APC) aggregated annually or seasonally, smoothed across service days.</li>
+              <li><strong className="text-slate-200">Live vs. bundled:</strong> TransitView, TrainView, and detour panels request live API data. Recovery, historical, tract, route-geometry, and priority-model values are bundled with the frontend.</li>
+              <li><strong className="text-slate-200">Fallback map data:</strong> If the live vehicle APIs are empty or unavailable, the map can display a small demonstration vehicle set so the interface remains usable. Those fallback positions are not live vehicles.</li>
+              <li><strong className="text-slate-200">API timing:</strong> A "live" public feed can still lag the physical system because the dashboard only knows the most recent record returned by SEPTA's endpoint.</li>
+              <li><strong className="text-slate-200">Exploratory models:</strong> Tract buckets, representative segment scores, and adjustable priority weights are analytical demonstrations, not official SEPTA classifications or planning recommendations.</li>
+              <li><strong className="text-slate-200">Historical values:</strong> Bundled figures do not update automatically and should be checked against their source datasets before being used as current planning data.</li>
             </ul>
           </div>
         </div>
