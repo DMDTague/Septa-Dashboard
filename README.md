@@ -11,13 +11,13 @@ An interactive look at how Philadelphia transit changed after 2019 — part reco
 
 The dashboard brings a few different views of the system into one place:
 
-- **Recovery overview** — compares post-pandemic ridership with a 2019 baseline by mode.
-- **Historical trends** — visualizes system-level ridership from the pre-COVID period through the recovery years included in the project.
+- **Recovery overview** — compares bundled post-pandemic ridership figures with a 2019 baseline by mode.
+- **Historical trends** — visualizes the project's 2014–2023 bus and rail series.
 - **Live vehicle map** — displays buses/trolleys and Regional Rail vehicles from SEPTA's public APIs, with route, mode, delay, and search filters.
 - **Live Regional Rail OTP** — calculates a simple on-time percentage from active TrainView records using a five-minute threshold.
 - **Active detours** — pulls current bus/trolley detour information from SEPTA's Bus Detours endpoint.
-- **Equity / latent-demand exploration** — uses tract-level examples to explore where low baseline ridership can hide meaningful demand spikes.
-- **Network priority sandbox** — lets you change the relative weight of frequency, delay, and load to see how representative route segments move in the ranking.
+- **Tract scenario explorer** — uses bundled examples to experiment with how uneven or off-peak demand can be visualized geographically.
+- **Route-segment sandbox** — lets you change the relative weight of frequency, delay, and load to see how representative segments move in the ranking.
 - **CSV export** — makes several dashboard datasets downloadable instead of trapping them inside a chart.
 
 Philadelphia transit data is messy in the interesting way: historical aggregates, live vehicle feeds, geography, service patterns, and very different definitions of what "recovery" means. This project is my attempt to put some of that in the same room.
@@ -33,7 +33,7 @@ Not every number on the dashboard is fetched live, and the distinction matters.
 | Bus & trolley detours | **Live API data** when available |
 | Mode recovery figures | **Bundled analytical dataset** |
 | 2014–2023 ridership series | **Bundled historical dataset** |
-| Tract distribution / latent-demand examples | **Bundled exploratory data** |
+| Tract distribution / scenario examples | **Bundled exploratory data** |
 | Representative bus segment metrics | **Bundled model inputs** |
 | Route polylines shown in the live map | **Bundled representative geometry** |
 
@@ -112,7 +112,7 @@ src/
 - Public transit APIs can be unavailable, rate-limited, delayed, or blocked by browser CORS behavior.
 - Several analytical sections are prototypes built from committed datasets rather than continuously updated feeds.
 - Representative route geometries and segment scores should not be mistaken for a complete SEPTA network model.
-- The priority tool is an exploratory weighting model, not an operational recommendation system.
+- The route-segment sandbox is an exploratory weighting model, not an operational recommendation system.
 - Historical figures should be revalidated against their original public datasets before being used for current planning or policy work.
 
 ## Why I built it
