@@ -55,14 +55,14 @@ const SEPTA_RED = '#EF3E42';
 
 // ---------- DATA CONSTANTS ----------
 const FALLBACK_MODE_RECOVERY = [
-  { mode: 'Bus', recovery: 74.1, gap: -25.9, status: 'Resilient Recovery',
-    insight: 'Bus ridership has recovered to ~74% of 2019 levels, making it the strongest mode. Essential workers, high-density neighborhood corridors, and non-car owners drive this resilient performance.' },
-  { mode: 'Heavy Rail', recovery: 50.9, gap: -49.1, status: 'Structural Shift',
-    insight: 'Heavy Rail (Market-Frankford & Broad Street Lines) sits at ~51% of 2019 levels. Underground rapid transit experienced heavy losses from hybrid office work in Center City.' },
-  { mode: 'Regional Rail', recovery: 54.6, gap: -45.4, status: 'Structural Shift',
-    insight: 'Regional Rail sits at ~55% of 2019. The traditional 9-to-5 peak commuter market has fundamentally transformed, requiring shift toward all-day regional service.' },
-  { mode: 'Trolley', recovery: 56.4, gap: -43.6, status: 'Moderate',
-    insight: 'Trolley recovery sits at ~56%. Infrastructure modernization and street-running congestion have impacted return rates.' },
+  { mode: 'Bus', recovery: 74.1, gap: -25.9, status: 'Highest in Dataset',
+    insight: 'The bundled project dataset places bus ridership at about 74% of its 2019 baseline, the highest recovery figure among the modes shown here.' },
+  { mode: 'Heavy Rail', recovery: 50.9, gap: -49.1, status: 'Lower Recovery',
+    insight: 'The bundled project dataset places Heavy Rail at about 51% of its 2019 baseline.' },
+  { mode: 'Regional Rail', recovery: 54.6, gap: -45.4, status: 'Lower Recovery',
+    insight: 'The bundled project dataset places Regional Rail at about 55% of its 2019 baseline.' },
+  { mode: 'Trolley', recovery: 56.4, gap: -43.6, status: 'Midrange Recovery',
+    insight: 'The bundled project dataset places trolley ridership at about 56% of its 2019 baseline.' },
 ];
 
 const FALLBACK_TIME_SERIES = [
@@ -80,57 +80,57 @@ const FALLBACK_TIME_SERIES = [
 
 const DISTRIBUTION_DATA = [
   { range: 'Cold Spots', label: 'Cold Spots (<50 trips)', count: 19,
-    desc: 'Census tracts with under 50 daily boardings+alightings. Many still show periodic off-peak spikes suggesting latent demand.' },
+    desc: 'Bundled exploratory category for tracts with fewer than 50 daily boardings and alightings in the project dataset.' },
   { range: 'Standard', label: 'Standard (50–1,000)', count: 190,
-    desc: 'Tracts with moderate ridership. These areas have baseline service but could gain significantly from micro-transit or schedule frequency tweaks.' },
+    desc: 'Bundled exploratory category for tracts with moderate ridership in the project dataset.' },
   { range: 'High Volume', label: 'High Volume (1,000+)', count: 643,
-    desc: 'High-volume tracts generating 1,000+ trips daily. These corridors represent the core transit backbone and demand reliability investments.' },
+    desc: 'Bundled exploratory category for tracts with more than 1,000 daily trips in the project dataset.' },
 ];
 
 const SYSTEM_SNAPSHOT = [
   { id: 'service', label: 'Weekday Scheduled Trips', metric: '7,820', unit: 'trips / weekday',
-    chip: 'Scheduled Service', change: '~92% of 2019', changeTone: 'positive', section: 'overview',
-    source: 'SEPTA GTFS',
-    hover: { title: 'Service Levels Near Full Restoration',
-      content: 'Scheduled trip miles have returned to roughly 92% of pre-pandemic levels based on GTFS schedules. Supply restoration has outpaced ridership rebound.' } },
+    chip: 'Bundled Estimate', change: '~92% of 2019', changeTone: 'positive', section: 'overview',
+    source: 'Bundled project data',
+    hover: { title: 'Scheduled Service Example',
+      content: 'This bundled project value is shown relative to a 2019 reference point. It is not refreshed from GTFS on page load.' } },
   { id: 'ridership', label: 'Average Daily Boardings', metric: '~640k', unit: 'riders / weekday',
-    chip: 'Total Demand', change: '~63% of 2019', changeTone: 'neutral', section: 'trends',
-    source: 'SEPTA ArcGIS',
-    hover: { title: 'Ridership Rebound Uneven',
-      content: 'System-wide ridership sits at ~63% of 2019 levels. Bus leads the system recovery while commuter rail lines lag due to work-from-home shifts.' } },
+    chip: 'Bundled Estimate', change: '~63% of 2019', changeTone: 'neutral', section: 'trends',
+    source: 'Bundled project data',
+    hover: { title: 'Ridership Recovery Example',
+      content: 'This bundled project value represents an analytical snapshot relative to 2019 rather than a live ridership feed.' } },
   { id: 'otp', label: 'Regional Rail OTP', metric: '—', unit: 'loading…',
     chip: 'Live OTP', change: 'Real-time', changeTone: 'neutral', section: 'liveMap',
     source: 'TrainView API (live)',
     hover: { title: 'Live On-Time Performance',
-      content: 'Real-time on-time percentage computed from active TrainView API feeds. Trains within 5 minutes of schedule count as on-time.' } },
+      content: 'On-time percentage computed from active TrainView records returned by SEPTA. Records reported five minutes late or less count as on-time in this dashboard.' } },
   { id: 'detours', label: 'Active Route Detours', metric: '—', unit: 'loading…',
-    chip: 'Active Disruptions', change: 'Real-time', changeTone: 'neutral', section: 'liveMap',
+    chip: 'Live Feed', change: 'Real-time', changeTone: 'neutral', section: 'liveMap',
     source: 'Bus Detours API (live)',
     hover: { title: 'Active Detour Advisories',
-      content: 'Live count of active bus and trolley detours from SEPTA\'s Bus Detours API. Indicates route detours caused by construction, events, or weather.' } },
+      content: 'Current count of bus and trolley detour records returned by SEPTA\'s Bus Detours API.' } },
 ];
 
 const LATENT_DEMAND_TARGETS = [
   { id: 1, tract: '42101010106', name: 'North Philadelphia - Temple', baseline: 12, peak: 108,
     spike: '9.0x', priority: 'High', lat: 39.98, lng: -75.16,
-    description: 'Dense student and shift-worker population. Fixed routes miss off-peak demand spikes.',
-    action: 'Deploy micro-transit pilot 8pm–2am.' },
+    description: 'Illustrative scenario used to explore how a large off-peak spike would appear in the interface.',
+    action: 'Example experiment: late-night micro-transit pilot.' },
   { id: 2, tract: '42101010', name: 'Germantown', baseline: 15, peak: 98,
     spike: '6.5x', priority: 'High', lat: 40.0428, lng: -75.17,
-    description: 'Historic residential neighborhood with gaps in current grid network.',
-    action: 'Connector shuttle service to Wayne Junction.' },
+    description: 'Illustrative scenario used to explore a neighborhood connector concept.',
+    action: 'Example experiment: connector shuttle to Wayne Junction.' },
   { id: 3, tract: '42101104503', name: 'West Philadelphia', baseline: 18, peak: 95,
     spike: '5.3x', priority: 'High', lat: 39.96, lng: -75.22,
-    description: 'High essential worker concentration; heavy weekend and late-night travel.',
-    action: 'First-mile/last-mile feeder to Market-Frankford Line.' },
+    description: 'Illustrative scenario used to explore first-mile and last-mile demand.',
+    action: 'Example experiment: feeder service to the Market-Frankford Line.' },
   { id: 4, tract: '42101203207', name: 'Northeast Philadelphia', baseline: 14, peak: 89,
     spike: '6.4x', priority: 'High', lat: 40.04, lng: -75.05,
-    description: 'Transit desert characteristics with high car dependence but low ownership.',
-    action: 'On-demand micro-transit zone replacing low-frequency fixed route.' },
+    description: 'Illustrative scenario used to explore an on-demand service model.',
+    action: 'Example experiment: on-demand micro-transit zone.' },
   { id: 5, tract: '42101308402', name: 'South Philadelphia', baseline: 16, peak: 87,
     spike: '5.4x', priority: 'Medium', lat: 39.92, lng: -75.16,
-    description: 'Dense residential streets where full-sized buses struggle with double-parked vehicles.',
-    action: 'Small vehicle circulator shuttle pilot.' },
+    description: 'Illustrative scenario used to explore a small-vehicle circulator concept.',
+    action: 'Example experiment: neighborhood circulator shuttle.' },
 ];
 
 const BUS_SEGMENTS = [
@@ -174,9 +174,9 @@ const SECTIONS = [
   { key: 'overview', label: 'Overview', icon: Activity },
   { key: 'trends', label: 'Trends', icon: TrendingUp },
   { key: 'liveMap', label: 'Live Map', icon: Radio },
-  { key: 'equity', label: 'Equity', icon: MapPin },
+  { key: 'equity', label: 'Tracts', icon: MapPin },
   { key: 'network', label: 'Network', icon: Bus },
-  { key: 'priority', label: 'Priority', icon: AlertTriangle },
+  { key: 'priority', label: 'Sandbox', icon: AlertTriangle },
   { key: 'methodology', label: 'About Data', icon: ExternalLink },
 ];
 
@@ -200,7 +200,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-export default function SeptaExecutiveDashboard() {
+export default function SeptaDashboard() {
   const [activeSection, setActiveSection] = useState('overview');
   const [hoveredChartData, setHoveredChartData] = useState(null);
   const [selectedTarget, setSelectedTarget] = useState(LATENT_DEMAND_TARGETS[0]);
@@ -301,12 +301,12 @@ export default function SeptaExecutiveDashboard() {
                     SEPTA Recovery Atlas
                   </h1>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#EF3E42]/20 text-[#EF3E42] border border-[#EF3E42]/30 font-semibold uppercase tracking-wider">
-                    Official Open Data
+                    Independent Project
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-400 font-medium flex items-center gap-1.5 mt-0.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Live API Feed Integrated · 2014–2025 Historical Trends
+                  Live SEPTA APIs + bundled historical analysis (2014–2023)
                 </p>
               </div>
             </div>
@@ -377,10 +377,10 @@ export default function SeptaExecutiveDashboard() {
             <div className="flex items-center gap-2">
               <Zap size={16} className="text-[#005DAA]" />
               <h2 className="text-xs font-bold text-slate-300 uppercase tracking-widest font-mono">
-                System Intelligence Snapshot
+                System Snapshot
               </h2>
             </div>
-            <span className="text-[11px] text-slate-500 font-mono">Real-Time Sync Active</span>
+            <span className="text-[11px] text-slate-500 font-mono">Live + bundled data</span>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -434,8 +434,8 @@ export default function SeptaExecutiveDashboard() {
                   <div
                     className="p-5 rounded-xl glass-panel glass-card-hover border-l-4 border-l-[#005DAA] cursor-pointer space-y-2"
                     onMouseEnter={() => setHoveredChartData({
-                      title: 'Bus Recovery: Essential System Spine',
-                      content: `Bus ridership sits at ${modeRecoveryData[0]?.recovery?.toFixed(1)}% of 2019 levels. Bus lines serve non-car owning households and essential workers whose travel demand cannot be replaced by remote work.`
+                      title: 'Bus Recovery in the Bundled Dataset',
+                      content: `Bus ridership is shown at ${modeRecoveryData[0]?.recovery?.toFixed(1)}% of the 2019 baseline in the dataset bundled with this project.`
                     })}
                     onMouseLeave={() => setHoveredChartData(null)}
                   >
@@ -450,16 +450,16 @@ export default function SeptaExecutiveDashboard() {
                     <p className="text-xs text-slate-400 font-medium">Surface Bus Network</p>
                     <div className="flex items-baseline gap-2">
                       <p className="text-3xl font-black text-white font-mono">{modeRecoveryData[0]?.recovery?.toFixed(0)}%</p>
-                      <span className="text-xs text-emerald-400 font-mono">Retained</span>
+                      <span className="text-xs text-emerald-400 font-mono">of baseline</span>
                     </div>
-                    <p className="text-[11px] text-slate-400">vs 2019 baseline · Official SEPTA APC Data</p>
+                    <p className="text-[11px] text-slate-400">2019 reference · bundled project dataset</p>
                   </div>
 
                   <div
                     className="p-5 rounded-xl glass-panel glass-card-hover border-l-4 border-l-[#EF3E42] cursor-pointer space-y-2"
                     onMouseEnter={() => setHoveredChartData({
-                      title: 'Rail Modes: Peak Demand Reset',
-                      content: `Heavy Rail and Regional Rail sit at ~51% and ~55% recovery respectively. The 5-day peak office commute model has been permanently altered by hybrid work schedules.`
+                      title: 'Rail Recovery in the Bundled Dataset',
+                      content: 'Heavy Rail and Regional Rail are shown at roughly 51% and 55% of their 2019 baselines in the dataset bundled with this project.'
                     })}
                     onMouseLeave={() => setHoveredChartData(null)}
                   >
@@ -468,7 +468,7 @@ export default function SeptaExecutiveDashboard() {
                         <Train size={20} />
                       </div>
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 border border-red-500/30 uppercase">
-                        Structural Shift
+                        Lower Recovery
                       </span>
                     </div>
                     <p className="text-xs text-slate-400 font-medium">Combined Rail Modes</p>
@@ -476,9 +476,9 @@ export default function SeptaExecutiveDashboard() {
                       <p className="text-3xl font-black text-white font-mono">
                         ~{Math.round((modeRecoveryData.filter(m => m.mode.includes('Rail')).reduce((s, m) => s + m.recovery, 0)) / modeRecoveryData.filter(m => m.mode.includes('Rail')).length)}%
                       </p>
-                      <span className="text-xs text-red-400 font-mono">Retained</span>
+                      <span className="text-xs text-red-400 font-mono">of baseline</span>
                     </div>
-                    <p className="text-[11px] text-slate-400">vs 2019 baseline · Official SEPTA Regional Rail Summaries</p>
+                    <p className="text-[11px] text-slate-400">2019 reference · bundled project dataset</p>
                   </div>
                 </div>
 
@@ -487,7 +487,7 @@ export default function SeptaExecutiveDashboard() {
                   <div className="flex flex-wrap justify-between items-start gap-4 pb-3 border-b border-slate-800">
                     <div>
                       <h2 className="text-lg font-bold text-white font-heading">System-Wide Mode Recovery Index</h2>
-                      <p className="text-xs text-slate-400 mt-0.5">Post-COVID average daily ridership relative to 2019 baseline</p>
+                      <p className="text-xs text-slate-400 mt-0.5">Bundled post-pandemic ridership figures relative to a 2019 baseline</p>
                     </div>
                     <DataExportButton data={modeRecoveryData} filename="septa_mode_recovery_stats" label="Export Dataset" />
                   </div>
@@ -518,8 +518,8 @@ export default function SeptaExecutiveDashboard() {
                   </div>
 
                   <div className="p-3.5 rounded-lg bg-slate-950/60 border border-slate-800 text-xs text-slate-400 flex justify-between items-center font-mono">
-                    <span>Target: 100% FY2019 baseline benchmark</span>
-                    <span>Data: SEPTA Ridership Statistics (ArcGIS Open Data)</span>
+                    <span>Reference: 2019 baseline = 100%</span>
+                    <span>Data: bundled project dataset</span>
                   </div>
                 </div>
               </div>
@@ -531,7 +531,7 @@ export default function SeptaExecutiveDashboard() {
                 <div className="flex flex-wrap justify-between items-start gap-4 pb-3 border-b border-slate-800">
                   <div>
                     <h2 className="text-lg font-bold text-white font-heading">Historical Demand Trends (2014–2023)</h2>
-                    <p className="text-xs text-slate-400 mt-0.5">Average daily ridership trajectories across Surface Bus vs Rail modes</p>
+                    <p className="text-xs text-slate-400 mt-0.5">Bundled average-daily-ridership series for bus and rail</p>
                   </div>
                   <DataExportButton data={timeSeriesData} filename="septa_historical_trends_2014_2023" label="Export Time Series" />
                 </div>
@@ -556,17 +556,17 @@ export default function SeptaExecutiveDashboard() {
                       <Tooltip content={<CustomTooltip />} />
                       <Legend wrapperStyle={{ paddingTop: '10px' }} />
                       <ReferenceLine x="2020" stroke="#EF3E42" strokeDasharray="3 3"
-                        label={{ value: 'COVID-19 Structural Break', position: 'top', fill: '#f87171', fontSize: 11 }} />
+                        label={{ value: 'COVID-19', position: 'top', fill: '#f87171', fontSize: 11 }} />
                       <Area type="monotone" dataKey="Bus" stroke="#005DAA" fill="url(#colorBusGrad)" strokeWidth={3}
                         onMouseEnter={() => setHoveredChartData({
-                          title: 'Bus Trend: Resilient Comeback',
-                          content: 'Bus ridership rebounded sharply post-2021. Core neighborhood bus routes sustain regular everyday travel demand.'
+                          title: 'Bus Trend',
+                          content: 'The bundled series shows a steep decline in 2020 followed by a partial recovery through 2023.'
                         })}
                         onMouseLeave={() => setHoveredChartData(null)} />
                       <Area type="monotone" dataKey="Rail" stroke="#EF3E42" fill="url(#colorRailGrad)" strokeWidth={3}
                         onMouseEnter={() => setHoveredChartData({
-                          title: 'Rail Trend: Lower Plateau',
-                          content: 'Rail modes flattened into a lower equilibrium post-2022 due to hybrid work policies across Center City employers.'
+                          title: 'Rail Trend',
+                          content: 'The bundled rail series shows a steep 2020 decline followed by a partial recovery through 2023.'
                         })}
                         onMouseLeave={() => setHoveredChartData(null)} />
                     </AreaChart>
@@ -583,14 +583,14 @@ export default function SeptaExecutiveDashboard() {
               </div>
             )}
 
-            {/* EQUITY TAB */}
+            {/* TRACT EXPLORATION TAB */}
             {activeSection === 'equity' && (
               <div className="space-y-6">
                 <div className="p-6 rounded-xl glass-panel space-y-4">
                   <div className="flex flex-wrap justify-between items-start gap-4 pb-3 border-b border-slate-800">
                     <div>
-                      <h2 className="text-lg font-bold text-white font-heading">Geographic Service Inequality Curve</h2>
-                      <p className="text-xs text-slate-400 mt-0.5">Ridership volume distribution across 852 Philadelphia census tracts</p>
+                      <h2 className="text-lg font-bold text-white font-heading">Exploratory Tract Distribution</h2>
+                      <p className="text-xs text-slate-400 mt-0.5">Bundled tract categories used for interface exploration</p>
                     </div>
                     <DataExportButton data={DISTRIBUTION_DATA} filename="septa_census_tract_distribution" label="Export Distribution" />
                   </div>
@@ -617,14 +617,14 @@ export default function SeptaExecutiveDashboard() {
                   </div>
                 </div>
 
-                {/* Latent Demand Hotspots Explorer */}
+                {/* Latent Demand Scenario Explorer */}
                 <div className="p-6 rounded-xl glass-panel space-y-4 border border-[#005DAA]/30">
                   <div className="flex justify-between items-center">
                     <div>
                       <h3 className="text-base font-bold text-white font-heading flex items-center gap-2">
-                        <Sparkles size={18} className="text-blue-400" /> Latent Demand Hotspots Explorer
+                        <Sparkles size={18} className="text-blue-400" /> Latent Demand Scenario Explorer
                       </h3>
-                      <p className="text-xs text-slate-400">Census tracts exhibiting high off-peak demand spikes</p>
+                      <p className="text-xs text-slate-400">Illustrative scenarios for exploring off-peak demand</p>
                     </div>
                   </div>
 
@@ -639,8 +639,8 @@ export default function SeptaExecutiveDashboard() {
                             eventHandlers={{ click: () => {
                               setSelectedTarget(target);
                               setHoveredChartData({
-                                title: `Hotspot Target: ${target.name}`,
-                                content: `${target.spike} demand surge above baseline of ${target.baseline}/day. Recommended action: ${target.action}`
+                                title: `Scenario: ${target.name}`,
+                                content: `${target.spike} example surge above a baseline of ${target.baseline}/day. ${target.action}`
                               });
                             } }}
                           >
@@ -648,7 +648,7 @@ export default function SeptaExecutiveDashboard() {
                               <div className="p-1 space-y-1 text-xs">
                                 <p className="font-bold text-white text-sm">{target.name}</p>
                                 <p className="text-slate-300">Baseline: {target.baseline}/day</p>
-                                <p className="text-slate-300">Peak Surge: {target.peak}/day</p>
+                                <p className="text-slate-300">Peak: {target.peak}/day</p>
                                 <p className="text-red-400 font-bold">Multiplier: {target.spike}</p>
                               </div>
                             </Popup>
@@ -665,22 +665,22 @@ export default function SeptaExecutiveDashboard() {
                         </div>
                         <div className="grid grid-cols-2 gap-3 mb-3">
                           <div className="p-3 rounded-lg bg-slate-900 border border-slate-800">
-                            <span className="text-[10px] font-mono text-slate-400 uppercase">Baseline Demand</span>
+                            <span className="text-[10px] font-mono text-slate-400 uppercase">Baseline</span>
                             <p className="text-lg font-black font-mono text-slate-200">{selectedTarget.baseline} riders/day</p>
                           </div>
                           <div className="p-3 rounded-lg bg-[#005DAA]/20 border border-blue-500/30">
-                            <span className="text-[10px] font-mono text-blue-300 uppercase">Peak Surge</span>
+                            <span className="text-[10px] font-mono text-blue-300 uppercase">Example Peak</span>
                             <p className="text-lg font-black font-mono text-blue-200">{selectedTarget.peak} riders/day</p>
                           </div>
                         </div>
                         <p className="text-xs text-slate-300 leading-relaxed">
-                          <strong className="text-white">Analysis:</strong> {selectedTarget.description}
+                          <strong className="text-white">Scenario:</strong> {selectedTarget.description}
                         </p>
                       </div>
 
                       <div className="p-3 rounded-lg bg-[#EF3E42]/15 border border-[#EF3E42]/30 text-xs">
                         <p className="font-bold text-red-400 uppercase flex items-center gap-1.5 mb-1">
-                          <CheckCircle size={14} /> Recommended Micro-Transit Pilot
+                          <CheckCircle size={14} /> Example Service Experiment
                         </p>
                         <p className="text-slate-200 font-medium">{selectedTarget.action}</p>
                       </div>
@@ -695,8 +695,8 @@ export default function SeptaExecutiveDashboard() {
               <div className="p-6 rounded-xl glass-panel space-y-5">
                 <div className="flex flex-wrap justify-between items-center gap-3 pb-3 border-b border-slate-800">
                   <div>
-                    <h2 className="text-lg font-bold text-white font-heading">Core Bus Spine Corridors</h2>
-                    <p className="text-xs text-slate-400">Routes 23, 47, 52 operational metrics lens</p>
+                    <h2 className="text-lg font-bold text-white font-heading">Representative Bus Segments</h2>
+                    <p className="text-xs text-slate-400">Routes 23, 47, and 52 using bundled example metrics</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-slate-400 font-mono">Lens:</span>
@@ -729,7 +729,7 @@ export default function SeptaExecutiveDashboard() {
                             eventHandlers={{
                               mouseover: () => setHoveredChartData({
                                 title: `${seg.line} — ${seg.direction}`,
-                                content: `${seg.freq_per_hr} buses/hr, ${seg.avg_delay_min}m delay offset, ${(seg.load_factor * 100).toFixed(0)}% load factor.`
+                                content: `${seg.freq_per_hr} buses/hr, ${seg.avg_delay_min}m delay offset, ${(seg.load_factor * 100).toFixed(0)}% load factor in the bundled example data.`
                               }),
                               mouseout: () => setHoveredChartData(null),
                             }}
@@ -744,8 +744,8 @@ export default function SeptaExecutiveDashboard() {
                       <h4 className="text-xs font-bold text-slate-300 font-mono uppercase mb-2">Score Scale</h4>
                       <div className="h-2.5 w-full rounded-full" style={{ backgroundImage: `linear-gradient(to right, ${SEPTA_BLUE}, ${SEPTA_RED})` }} />
                       <div className="flex justify-between text-[10px] font-mono text-slate-400 mt-1.5">
-                        <span>Low Score</span>
-                        <span>High Priority</span>
+                        <span>Lower Score</span>
+                        <span>Higher Score</span>
                       </div>
                     </div>
                   </div>
@@ -753,12 +753,12 @@ export default function SeptaExecutiveDashboard() {
               </div>
             )}
 
-            {/* PRIORITY TAB */}
+            {/* SANDBOX TAB */}
             {activeSection === 'priority' && (
               <div className="p-6 rounded-xl glass-panel space-y-5">
                 <div>
-                  <h2 className="text-lg font-bold text-white font-heading">Multi-Criteria Bus Lane Priority Calculator</h2>
-                  <p className="text-xs text-slate-400 mt-0.5">Adjust analytical weights to prioritize bus rapid transit corridors</p>
+                  <h2 className="text-lg font-bold text-white font-heading">Multi-Criteria Route Segment Sandbox</h2>
+                  <p className="text-xs text-slate-400 mt-0.5">Adjust weights to see how representative route segments move in the ranking</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
@@ -783,7 +783,7 @@ export default function SeptaExecutiveDashboard() {
                     </div>
 
                     <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800">
-                      <h4 className="text-xs font-bold text-white font-mono uppercase mb-3">Ranked Priority Candidates</h4>
+                      <h4 className="text-xs font-bold text-white font-mono uppercase mb-3">Ranked Example Segments</h4>
                       <div className="space-y-2 max-h-56 overflow-auto custom-scrollbar">
                         {scoredSegments.map((seg) => (
                           <div key={seg.id} className="flex items-center justify-between gap-2 text-xs border border-slate-800 rounded-lg p-2 bg-slate-900/60">
@@ -816,7 +816,7 @@ export default function SeptaExecutiveDashboard() {
             {activeSection === 'methodology' && <MethodologyPanel />}
           </div>
 
-          {/* RIGHT COLUMN: ANALYTICAL INSIGHT SIDEBAR */}
+          {/* RIGHT COLUMN: ANALYSIS SIDEBAR */}
           {!insightCollapsed && (
             <div className="hidden lg:block">
               <div className="sticky top-20 h-[calc(100vh-6rem)]">
