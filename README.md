@@ -1,129 +1,122 @@
-# SEPTA Dashboard
+# SEPTA Recovery Atlas
 
-A data-driven dashboard offering interactive insights and analysis around SEPTA transportation metrics.  
-This project gathers relevant transit data (e.g. ridership, performance, maybe historical or COVID-era data), processes and visualizes it in a user-friendly web application — available publicly.  
+An interactive look at how Philadelphia transit changed after 2019 — part recovery tracker, part live operations view, part data sandbox.
 
-🔗 **Live Demo:** https://septa-covid-analysis.vercel.app  
-🔗 **Repository:** https://github.com/DMDTague/Septa-Dashboard
+**Live demo:** https://septa-covid-analysis.vercel.app  
+**Repository:** https://github.com/DMDTague/Septa-Dashboard
 
----
+> This is an independent project built with public SEPTA data. It is not an official SEPTA product.
 
-## 📌 Table of Contents
-- [Overview](#overview)  
-- [Technologies Used](#technologies-used)  
-- [Features](#features)  
-- [Architecture](#architecture)  
-- [How I Built It](#how-i-built-it)  
-- [What I Learned](#what-i-learned)  
-- [Improvements / Future Work](#improvements--future-work)   
-- [Why This Matters](#why-this-matters)  
-- [Summary](#summary)  
+## What it does
 
----
+The dashboard brings a few different views of the system into one place:
 
-## 🧠 Overview
+- **Recovery overview** — compares post-pandemic ridership with a 2019 baseline by mode.
+- **Historical trends** — visualizes system-level ridership from the pre-COVID period through the recovery years included in the project.
+- **Live vehicle map** — displays buses/trolleys and Regional Rail vehicles from SEPTA's public APIs, with route, mode, delay, and search filters.
+- **Live Regional Rail OTP** — calculates a simple on-time percentage from active TrainView records using a five-minute threshold.
+- **Active detours** — pulls current bus/trolley detour information from SEPTA's Bus Detours endpoint.
+- **Equity / latent-demand exploration** — uses tract-level examples to explore where low baseline ridership can hide meaningful demand spikes.
+- **Network priority sandbox** — lets you change the relative weight of frequency, delay, and load to see how representative route segments move in the ranking.
+- **CSV export** — makes several dashboard datasets downloadable instead of trapping them inside a chart.
 
-This dashboard leverages publicly available transit data related to SEPTA — transforming raw data into an interactive web interface that helps users explore ridership, performance, and transit trends.  
-The goal is to make complex transit data understandable and actionable, giving insight into usage patterns, historical context (e.g. pre-/post-COVID), and performance metrics across time or routes.
+Philadelphia transit data is messy in the interesting way: historical aggregates, live vehicle feeds, geography, service patterns, and very different definitions of what "recovery" means. This project is my attempt to put some of that in the same room.
 
----
+## Live data vs. built-in analysis
 
-## 🛠️ Technologies Used
+Not every number on the dashboard is fetched live, and the distinction matters.
 
-### **Backend / Data**
-- **JavaScript / TypeScript** (or Python — depending on data fetching/processing)  
-- Data fetching from public transit data sources (APIs, CSV/JSON datasets)  
-- Data cleaning, normalization, computation for metrics/trends  
+| Part of the app | Data behavior |
+| --- | --- |
+| TransitView / vehicle positions | **Live API data** when available |
+| TrainView / Regional Rail | **Live API data** when available |
+| Bus & trolley detours | **Live API data** when available |
+| Mode recovery figures | **Bundled analytical dataset** |
+| 2014–2023 ridership series | **Bundled historical dataset** |
+| Tract distribution / latent-demand examples | **Bundled exploratory data** |
+| Representative bus segment metrics | **Bundled model inputs** |
+| Route polylines shown in the live map | **Bundled representative geometry** |
 
-### **Frontend**
-- **React** (or similar modern JS framework)  
-- **Vite** (or other bundler/build tool)  
-- **HTML / CSS / JS** for UI & data visualizations  
+The live map also contains a small fallback vehicle dataset. If SEPTA's endpoints are unavailable, blocked by CORS, or return no vehicles, the interface can still demonstrate the map instead of collapsing into an empty panel. Fallback records are demonstration data, not live positions.
 
-### **Dev / Deployment**
-- **ESLint** (or other linting/formatting tools)  
-- **Vercel** for hosting & auto-deployment from GitHub :contentReference[oaicite:1]{index=1}  
+That makes this a hybrid dashboard: some panels are genuinely live, while others are analytical or illustrative views shipped with the frontend.
 
----
+## Stack
 
-## ⭐ Features
+- **React 19**
+- **Vite 7**
+- **Recharts** for charts
+- **Leaflet + React Leaflet** for mapping
+- **Tailwind CSS** for styling
+- **Lucide React** for interface icons
+- **SEPTA public APIs** for live operational data
+- **Vercel** for deployment
 
-- 📈 **Interactive dashboard** visualizing transit/transportation data (ridership, performance)  
-- 📊 **Charts & metrics** to explore historic and current transit data (e.g. ridership before/after COVID, route-level performance, trend comparisons)  
-- 🌐 **Clean UI** — making complex data digestible for any user (commuter, analyst, policymaker)  
-- 🔄 **Dynamic data loading / updating** — fetches from data sources to ensure up-to-date info  
+There is no application backend or database in this repository. The browser client handles the dashboard and requests SEPTA data directly or through the configured proxy path.
 
----
+## SEPTA API flow
 
-## 🧱 Architecture
+Live requests use the following order:
 
+1. `/api/septa/...` through the local/Vercel proxy configuration.
+2. SEPTA's public API directly.
+3. A CORS proxy fallback if the first two approaches fail.
 
-### **1. Data Layer**
-- Imports data (from APIs or publicly available datasets)  
-- Cleans and standardizes data (handles inconsistencies, missing fields, date/ridership normalization)  
-- Computes aggregated metrics, trends, comparisons  
+The app currently uses helpers for:
 
-### **2. Frontend App**
-- React-based UI to load processed data  
-- Renders interactive charts, dashboards, filters (by route, date-range, ridership, etc.)  
-- Provides contextual info and explanations for users  
+- `TransitView`
+- `TransitViewAll`
+- `TrainView`
+- `BusDetours`
+- SEPTA v2 trip data
 
-### **3. Deployment**
-- Built with a modern bundler (e.g. Vite)  
-- Deployed statically via Vercel for global accessibility  
+The live vehicle view refreshes on a 15-second interval.
 
----
+## Data sources referenced by the project
 
-## 🏗️ How I Built It
+The dashboard's methodology panel documents the public sources used or referenced by the analysis, including:
 
-1. Explored and collected public data sources related to SEPTA ridership/performance (from open data portals) :contentReference[oaicite:2]{index=2}  
-2. Built data-fetching and data-cleaning scripts to standardize and aggregate data  
-3. Designed data models / metrics for visualization (e.g. ridership over time, comparisons, performance indicators)  
-4. Created a React-based frontend to visualize these metrics and allow user interaction/filtering  
-5. Styled and built UI for readability and usability  
-6. Deployed on Vercel for easy public access and shareability  
+- **SEPTA TransitView** — bus and trolley vehicle information
+- **SEPTA TrainView** — Regional Rail vehicle and lateness information
+- **SEPTA ArcGIS Open Data** — geospatial/open-data material
+- **OpenDataPhilly SEPTA datasets** — historical ridership material
 
----
+Historical and exploratory values currently used by the React app are committed with the frontend rather than re-downloaded from those sources on every page load.
 
-## 📚 What I Learned
+## Run locally
 
-- How to work with **public transit data** (APIs, CSV/JSON, ridership stats) and manage real-world data irregularities  
-- Building a full **data → frontend → deployment** pipeline end-to-end  
-- Translating raw data into **insightful visualizations** useful to non-technical users  
-- Using modern web tools (React, bundlers, static hosting) to build dashboards quickly and efficiently  
+```bash
+npm install
+npm run dev
+```
 
----
+For a production build:
 
-## 🚀 Improvements / Future Work
+```bash
+npm run build
+npm run preview
+```
 
-- Add **route-level filtering and drill-down** (e.g. choose a bus or rail line to view detailed ridership/performance)  
-- Include **historical vs. current comparisons** (pre-pandemic / post-pandemic / long-term trend analysis)  
-- Add **export functionality** (CSV, PDF) for users or analysts  
-- Provide **real-time data updates** (if supported by data source)  
-- Enhance **accessibility & UX** — tooltips, help docs, responsive layout  
-- Add **tests / data validation pipeline** to ensure data quality before visualization  
+## Project structure
 
----
+```text
+src/
+├── components/       dashboard panels, maps, exports, methodology
+├── utils/            SEPTA API helpers and data transforms
+├── SeptaDashboard.jsx
+└── main.jsx
+```
 
-## 🎯 Why This Matters
+## A few limitations
 
-This project:
+- Public transit APIs can be unavailable, rate-limited, delayed, or blocked by browser CORS behavior.
+- Several analytical sections are prototypes built from committed datasets rather than continuously updated feeds.
+- Representative route geometries and segment scores should not be mistaken for a complete SEPTA network model.
+- The priority tool is an exploratory weighting model, not an operational recommendation system.
+- Historical figures should be revalidated against their original public datasets before being used for current planning or policy work.
 
-- Helps commuters, city planners, and community members understand **transit usage and performance trends**
-- Makes raw transit data **accessible, transparent, and visual** — enhancing public awareness of system performance
-- Provides insights into how major events (e.g., the pandemic) affected **public transit ridership and service**
-- Demonstrates end-to-end **data acquisition → processing → visualization → deployment**, showcasing a full-stack workflow
+## Why I built it
 
----
+I wanted something more interesting than a single "ridership is X% recovered" number. Bus, rail, commuter service, geography, delays, and travel behavior did not all move together after 2020, so the dashboard gives those differences room to show up.
 
-## ✅ Summary
-
-**SEPTA Dashboard** is a full-stack, public-facing transit analytics tool — converting publicly available transportation data into meaningful insights through an interactive, modern web dashboard.
-
-It showcases skills in:
-
-- **Data fetching & cleaning**
-- **Data visualization**
-- **Frontend development**
-- **Deployment & web hosting**
-- **Communicating data-driven insights clearly**
+It also gave me an excuse to combine public-data analysis with a live React interface, which is a much better fate for a CSV than quietly dying in a downloads folder.
